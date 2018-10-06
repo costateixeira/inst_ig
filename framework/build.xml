@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project name="org.hl7.fhir.tools" basedir=".." default="publish-ig">
   <property name="updatePublisher" value="Y"/>
+  <property name="igRoot" value=".."/>
   <property name="noTx" value="N"/>
   <!-- Where the main FHIR build publish folder is -->
   <property name="jar.publisher" value="http://build.fhir.org/org.hl7.fhir.igpublisher.jar"/>
   <!-- Project-specific inputs -->
+  <property name="dir.orig_src" value="${igRoot}/src"/>
   <property name="dir.src" value="src"/>
   <!-- Working area -->
   <property name="dir.srcgenned" value="src-generated"/>
@@ -35,6 +37,15 @@
   </condition>
   <target name="local-setup" description="-- grabs igpublisher from local build and schemas from spec">
     <fail if="badrun" message="Can't run in continuous mode when processing multiple IG versions"/>
+					<!--JCT-->
+					<echo>Embed another:${igRoot}</echo>
+					<copy todir="${dir.src}">
+					  <fileset dir="${dir.orig_src}"/>
+					</copy>
+					<copy todir="${dir.src}"> <!--only if the ig.xml is not in src folder but one above -->
+					  <fileset dir="${igRoot}" includes="*.xml"/>
+					</copy> 
+					<!--JCT-->
     <mkdir dir="${dir.srcgenned}"/>
     <mkdir dir="${dir.schemas}"/>
     <dependset>
